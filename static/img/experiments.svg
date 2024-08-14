@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150">
+  <!-- Robot head (as a beaker) -->
+  <path d="M60 50 L60 120 Q100 150 140 120 L140 50 Z" fill="#ecf0f1" stroke="#34495e" stroke-width="3" />
+
+  <!-- Robot face -->
+  <rect x="70" y="70" width="60" height="50" fill="#34db98" rx="10" />
+
+  <!-- Eyes (as safety goggles) -->
+  <rect x="75" y="80" width="20" height="15" fill="#f39c12" rx="5" />
+  <rect x="105" y="80" width="20" height="15" fill="#f39c12" rx="5" />
+  <line x1="75" y1="87" x2="125" y2="87" stroke="#34495e" stroke-width="2" />
+
+  <!-- Mouth -->
+  <path d="M85 110 Q100 120 115 110" fill="none" stroke="#ecf0f1" stroke-width="3" />
+
+  <!-- Bubbles in beaker -->
+  <circle cx="80" cy="60" r="5" fill="#3498db" />
+  <circle cx="100" cy="65" r="3" fill="#3498db" />
+  <circle cx="120" cy="62" r="4" fill="#3498db" />
+
+  <!-- Atom symbol -->
+  <circle cx="100" cy="30" r="15" fill="none" stroke="#3498db" stroke-width="2" />
+  <ellipse cx="100" cy="30" rx="15" ry="5" fill="none" stroke="#3498db" stroke-width="2" />
+  <ellipse cx="100" cy="30" rx="15" ry="5" fill="none" stroke="#3498db" stroke-width="2" transform="rotate(60 100 30)" />
+  <ellipse cx="100" cy="30" rx="15" ry="5" fill="none" stroke="#3498db" stroke-width="2" transform="rotate(-60 100 30)" />
+</svg>

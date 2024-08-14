@@ -36,17 +36,11 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/autocode2/autocode2.github.com/tree/main/packages/create-docusaurus/templates/shared/',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/autocode2/autocode2.github.com/tree/main/packages/create-docusaurus/templates/shared/',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -65,12 +59,7 @@ const config: Config = {
         src: 'img/ai-builder-logo-svg.svg',
       },
       items: [
-        //{
-        //type: 'docSidebar',
-        //sidebarId: 'tutorialSidebar',
-        //position: 'left',
-        //label: 'Tutorial',
-        //},
+        { to: '/documentation', label: 'Documentation', position: 'left' },
         { to: '/blog', label: 'Blog', position: 'left' },
         {
           href: 'https://github.com/autocode2',
@@ -114,7 +103,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Gareth Andrew. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Gareth Andrew. Built with Docusaurus with a little help from Claude`,
     },
     prism: {
       theme: prismThemes.github,
