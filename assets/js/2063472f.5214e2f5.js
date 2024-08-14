@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkautocode_2_github_io=self.webpackChunkautocode_2_github_io||[]).push([[215],{7646:o=>{o.exports=JSON.parse('{"tags":[{"label":"futurology","permalink":"/blog/tags/futurology","description":"prognostications on the future","count":1}]}')}}]);

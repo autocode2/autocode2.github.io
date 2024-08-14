@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Robot head (as hard hat) -->
+  <path d="M50 100 Q100 50 150 100 L150 130 Q100 160 50 130 Z" fill="#FFD700" />
+
+  <!-- Robot face -->
+  <rect x="60" y="90" width="80" height="60" fill="#34db98" rx="10" />
+
+  <!-- Eyes -->
+  <circle cx="80" cy="110" r="8" fill="#ecf0f1" />
+  <circle cx="120" cy="110" r="8" fill="#ecf0f1" />
+
+  <!-- Mouth -->
+  <rect x="85" y="130" width="30" height="5" fill="#ecf0f1" rx="2" />
+
+  <!-- Construction elements -->
+  <rect x="30" y="150" width="140" height="20" fill="#e74c3c" /> <!-- Brick base -->
+  <path d="M20,150 L100,70 L180,150" fill="none" stroke="#34495e" stroke-width="4" /> <!-- Crane arm -->
+  <circle cx="100" cy="70" r="5" fill="#e74c3c" /> <!-- Crane top -->
+
+  <!-- Warning stripes -->
+  <rect x="30" y="170" width="140" height="10" fill="#f1c40f" />
+  <path d="M30,170 l10,10 h10 l10,-10" fill="#34495e" />
+  <path d="M60,170 l10,10 h10 l10,-10" fill="#34495e" />
+  <path d="M90,170 l10,10 h10 l10,-10" fill="#34495e" />
+  <path d="M120,170 l10,10 h10 l10,-10" fill="#34495e" />
+  <path d="M150,170 l10,10 h10" fill="#34495e" />
+</svg>
