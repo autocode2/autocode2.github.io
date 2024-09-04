@@ -1,0 +1,36 @@
+---
+slug: todo-with-more-features
+title: Todo with more features
+authors: [gingerhendrix]
+tags: []
+---
+
+# A fully featured Todo App
+
+The previous app was too easy for all the models, so I iterated on the prompt until I came up with
+
+```markdown title="App Prompt"
+Build a todo app.
+
+Each todo item should have the following properties:
+- content
+- status (todo, in progress, complete)
+- due date (optional)
+- created date, started date (when it was marked as in progress), completed date (when it was marked as complete)
+- tags (optional)
+- priority (optional)
+
+The app should have the following features:
+ - You should be able to see the list of todos.
+ - You should be able to add a todo, delete a todo and update a todo.
+ - You should be able to mark a todo as complete.
+ - You should be able to filter the todos by tags, status, priority, due date, including combinations of these filters.
+ - You should be able to sort the todos by due date, created date, started date, completed date, priority, status.
+ - You should be able to search for a todo by content.
+```
+
+Claude-3-5-sonnet mostly doesn't break a sweat, though we do have to fix a type error to get a production build.
+
+* [View the App](https://autocode2.github.io/autocode-examples/examples/example-todo/blog/2024-08-14-todo-with-more-features/typescript_nextjs_shadcn/sonnet)
+* [Generated Code](https://github.com/autocode2/example-todo/commit/0057b0233f4042afebd4de82838a7d61552d13e1)
+* [Manual Fix](https://github.com/autocode2/example-todo/commit/66300288caa28d190f76976ff7fa636d415985d1)
