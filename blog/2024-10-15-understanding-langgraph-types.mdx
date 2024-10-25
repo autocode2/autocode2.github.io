@@ -1,0 +1,222 @@
+# Understanding LangGraph Types
+
+I often run into difficulties trying to build generic apis on top of LangGraph. The types are quite complex so I needed a reference.
+
+<!-- truncate -->
+
+## 1. StateDefinition and Channels: The Building Blocks of State
+
+At the heart of LangGraph's state management is the `StateDefinition`. This is an object that defines the structure of your application's state, where each key represents a piece of state, and the value is a *channel* that determines how that state is
+updated.
+
+A channel in LangGraph is an instance of a class that extends `BaseChannel`. Different channel types provide different behaviors for updating state. Let's look at some common channel types:
+
+```typescript
+import { LastValue, Topic, BinaryOperatorAggregate, EphemeralValue } from "@langchain/langgraph/channels";
+
+// Define our state structure
+interface Ticket {
+    id: string;
+    customer: string;
+    issue: string;
+    status: 'open' | 'in_progress' | 'closed';
+}
+
+// Create our state definition with explicit channels
+const TicketSystemState = {
+    currentTicket: new LastValue<Ticket>(),
+    allTickets: new Topic<Ticket>({ accumulate: true }),
+    ticketCounts: new BinaryOperatorAggregate<Record<Ticket['status'], number>, Ticket>(
+      (current, newTicket) => ({
+        ...current,
+        [newTicket.status]: (current[newTicket.status] || 0) + 1,
+      }),
+      () => ({ open: 0, in_progress: 0, closed: 0 })
+    ),
+    lastAction: new LastValue<string>(),
+    tempData: new EphemeralValue<any>(),
+};
+```
+
+In this example:
+- `LastValue` always stores the most recent value.
+- `Topic` accumulates values over time.
+- `BinaryOperatorAggregate` allows custom reduction logic.
+- `EphemeralValue` stores temporary data that's cleared after each step.
+
+Each channel type provides different behavior for how state is updated and maintained throughout the execution of your graph.
+
+## 2. Annotation.Root: Syntactic Sugar for State Definition
+
+While explicitly defining channels gives you fine-grained control, LangGraph provides a more concise way to define state using `Annotation.Root`. This approach uses type inference and default behaviors to simplify your state definition:
+
+```typescript
+import { Annotation } from "@langchain/langgraph";
+
+const TicketSystemState = Annotation.Root({
+    currentTicket: Annotation<Ticket>(),
+    allTickets: Annotation<Ticket[]>({
+      reducer: (current, newTickets) => [...current, ...newTickets],
+      default: () => [],
+    }),
+    ticketCounts: Annotation<Record<Ticket['status'], number>>({
+      reducer: (current, newTicket: Ticket) => ({
+        ...current,
+        [newTicket.status]: (current[newTicket.status] || 0) + 1,
+      }),
+      default: () => ({ open: 0, in_progress: 0, closed: 0 }),
+    }),
+    lastAction: Annotation<string>(),
+    tempData: Annotation<any>(),
+});
+```
+
+This approach is more concise and easier to read.
+
+## 3. Building a StateGraph: Understanding the State Types
+
+Let's create a StateGraph using our TicketSystemState and examine its type:
+
+```typescript
+import { StateGraph, type StateType, type UpdateType } from "@langchain/langgraph";
+
+const ticketSystem = new StateGraph(TicketSystemState);
+```
+
+The type of `ticketSystem` is quite complex due to TypeScript's type inference. If we were to write it out explicitly, it would look something like this:
+
+```typescript
+const ticketSystem: StateGraph<
+typeof TicketSystemState,
+StateType<typeof TicketSystemState>,
+UpdateType<typeof TicketSystemState>,
+string,
+typeof TicketSystemState,
+typeof TicketSystemState
+>;
+```
+
+Let's break down these type parameters:
+
+1. `typeof TicketSystemState`: This is the state definition.
+2. `StateType<typeof TicketSystemState>`: This represents the actual state shape, derived from the state definition.
+3. `UpdateType<typeof TicketSystemState>`: This represents the shape of partial updates to the state.
+4. `string`: This is the default type for node names.
+5. `typeof TicketSystemState`: This is used for both the input and output state definitions, which are the same as our main state in this case.
+
+Now, when we add nodes to our StateGraph, the types of the state and updates are inferred from our state definition:
+
+```typescript
+ticketSystem.addNode("receiveTicket", (state) => {
+// 'state' is inferred to be StateType<typeof TicketSystemState>
+const newTicket: Ticket = {
+  id: `ticket_${Date.now()}`,
+  customer: "John Doe",
+  issue: "Cannot login",
+  status: "open",
+};
+// The return type is inferred to be UpdateType<typeof TicketSystemState>
+return {
+  currentTicket: newTicket,
+  allTickets: [newTicket],
+  ticketCounts: newTicket,
+  lastAction: "Received new ticket",
+  tempData: { receivedAt: new Date() },
+};
+});
+```
+
+In this node function:
+- The `state` parameter is of type `StateType<typeof TicketSystemState>`, which includes all the fields we defined in our state.
+- The return value is of type `UpdateType<typeof TicketSystemState>`, which is a partial update to our state.
+
+## 4. Type-Safe Node Names in StateGraph
+
+In addition to type-checking the state, StateGraph also provides type safety for node names. As we add nodes to our graph, TypeScript updates the union type of node names in the StateGraph type. Let's see how this works:
+
+```typescript
+ticketSystem
+.addNode("receiveTicket", (state) => {
+  // Node logic here...
+  return { /* ... */ };
+})
+.addNode("processTicket", (state) => {
+  // Node logic here...
+  return { /* ... */ };
+})
+.addNode("closeTicket", (state) => {
+  // Node logic here...
+  return { /* ... */ };
+});
+```
+
+After adding these nodes, the type of `ticketSystem` includes the literal types "receiveTicket", "processTicket", and "closeTicket" in its node name union. The full type now looks like this:
+
+```typescript
+const ticketSystem: StateGraph<
+typeof TicketSystemState,
+StateType<typeof TicketSystemState>,
+UpdateType<typeof TicketSystemState>,
+"receiveTicket" | "processTicket" | "closeTicket",
+typeof TicketSystemState,
+typeof TicketSystemState
+>;
+```
+
+This type-checking becomes particularly useful when we add edges:
+
+```typescript
+ticketSystem
+.addEdge("receiveTicket", "processTicket")
+.addEdge("processTicket", "closeTicket");
+```
+
+TypeScript will ensure that we're only using node names that we've actually defined. If we try to add an edge with a non-existent node name, we'll get a compile-time error:
+
+```typescript
+// This would cause a TypeScript error
+ticketSystem.addEdge("receiveTicket", "nonExistentNode");
+// Error: Argument of type '"nonExistentNode"' is not assignable to parameter of type '"receiveTicket" | "processTicket" | "closeTicket"'.
+```
+
+This type safety extends to other methods that use node names, such as `addConditionalEdges`:
+
+```typescript
+ticketSystem.addConditionalEdges(
+"processTicket",
+(state) => state.currentTicket.status === "in_progress" ? "closeTicket" : "receiveTicket",
+["closeTicket", "receiveTicket"]
+);
+```
+
+In this case, TypeScript will ensure that:
+1. "processTicket" is a valid node name for the first argument.
+2. The function returns a valid node name.
+3. The array in the third argument only contains valid node names.
+
+## 5. Compiling and Running the StateGraph
+
+Finally, when we compile our graph:
+
+```typescript
+const compiledGraph = ticketSystem.compile();
+```
+
+The type of `compiledGraph` is:
+
+```typescript
+const compiledGraph: CompiledStateGraph<
+StateType<typeof TicketSystemState>,
+UpdateType<typeof TicketSystemState>,
+"receiveTicket" | "processTicket" | "closeTicket",
+typeof TicketSystemState,
+typeof TicketSystemState
+>;
+```
+
+This compiled graph is what we actually use to run our workflow:
+
+```typescript
+const result = await compiledGraph.invoke({});
+// result is of type StateType<typeof TicketSystemState>
+```
