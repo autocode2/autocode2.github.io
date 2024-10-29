@@ -4,10 +4,34 @@
         <title>Auto Code Blog</title>
         <link>https://autocode2.github.io/blog/</link>
         <description>Auto Code Blog</description>
-        <lastBuildDate>Thu, 24 Oct 2024 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 29 Oct 2024 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[Automatic Coding Tools]]></title>
+            <link>https://autocode2.github.io/blog/automatic-coding-tools/</link>
+            <guid>https://autocode2.github.io/blog/automatic-coding-tools/</guid>
+            <pubDate>Tue, 29 Oct 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[For now this is just an unsorted, incomplete list of tools related to AI-driven coding. I'll hopefully come back to this later:]]></description>
+            <content:encoded><![CDATA[<p>For now this is just an unsorted, incomplete list of tools related to AI-driven coding. I'll hopefully come back to this later:</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ai-code-assistants-and-vs-code-wrappers">AI Code Assistants and VS Code Wrappers<a href="https://autocode2.github.io/blog/automatic-coding-tools/#ai-code-assistants-and-vs-code-wrappers" class="hash-link" aria-label="Direct link to AI Code Assistants and VS Code Wrappers" title="Direct link to AI Code Assistants and VS Code Wrappers">​</a></h3>
+<ul>
+<li><a href="https://www.tabnine.com/" target="_blank" rel="noopener noreferrer">TabNine</a></li>
+<li><a href="https://copilot.github.com/" target="_blank" rel="noopener noreferrer">Copilot</a></li>
+<li><a href="https://codeium.com/" target="_blank" rel="noopener noreferrer">Codium</a></li>
+<li><a href="https://sourcegraph.com/cody" target="_blank" rel="noopener noreferrer">Cody</a></li>
+<li><a href="https://www.cursor.com/" target="_blank" rel="noopener noreferrer">Cursor</a></li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ai-application-generators">AI Application Generators<a href="https://autocode2.github.io/blog/automatic-coding-tools/#ai-application-generators" class="hash-link" aria-label="Direct link to AI Application Generators" title="Direct link to AI Application Generators">​</a></h3>
+<ul>
+<li><a href="https://v0.dev/" target="_blank" rel="noopener noreferrer">v0</a></li>
+<li><a href="https://replit.com/" target="_blank" rel="noopener noreferrer">Replit</a></li>
+<li><a href="https://lovable.dev/gpt-engineer/" target="_blank" rel="noopener noreferrer">GPTEngineer</a></li>
+<li><a href="https://bolt.new/" target="_blank" rel="noopener noreferrer">Bolt.new</a></li>
+<li><a href="https://www.rapidpages.com/" target="_blank" rel="noopener noreferrer">RapidPages</a> - Design only</li>
+</ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[Testing the new Sonnet]]></title>
             <link>https://autocode2.github.io/blog/new-sonnet/</link>

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkautocode_2_github_io=self.webpackChunkautocode_2_github_io||[]).push([[1672],{3024:e=>{e.exports=JSON.parse('{"authors":[{"name":"Gareth Andrew","title":"Chief Auto Coder","url":"https://github.com/autocode2","imageURL":"https://github.com/autocode2.png","key":"gingerhendrix","page":null,"count":6}]}')}}]);
