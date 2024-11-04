@@ -31,6 +31,17 @@ const config: Config = {
     locales: ['en'],
   },
 
+  plugins: [
+    [
+      "@dipakparmar/docusaurus-plugin-umami",
+      /** @type {import('@dipakparmar/docusaurus-plugin-umami').Options} */
+      ({
+        websiteID: "167d534b-b988-4b7f-81c3-4816d449fc67",
+        analyticsDomain: "autocode2.github.io", // Required
+      }),
+    ],
+  ],
+
   presets: [
     [
       'classic',
