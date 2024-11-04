@@ -1,0 +1,143 @@
+---
+slug: testing-todo-app-with-stagehand
+title: Testing the Todo App with Stagehand
+authors: [gingerhendrix]
+tags: []
+---
+
+[Browserbase](https://www.browserbase.com/) have just launched a new tool based on Playwright, called [Stagehand](https://github.com/browserbase/stagehand).
+
+> Stagehand is the AI-powered successor to Playwright, offering three simple APIs (act, extract, and observe) that provide the building blocks for natural language driven web automation.
+
+Stagehand offers three API methods:
+- `act` - Perform an action on the page
+- `extract` - Extract data from the page
+- `observe` - Show the possible actions that can be performed on the page
+
+Each Stagehand command takes a natural language string as input and uses a language model (currently Anthropic or OpenAI models) to convert the natural language into a Playwright script and then executes it.
+
+One advantage of using Stagehand is that we don't need any knowledge of how the DOM is structured to interact with the page. This is perfect to test the auto-generated [React Todo Apps](/blog/introducing-react-todo).
+
+<!--truncate-->
+
+## Getting Started
+
+I followed the example from the README and ran it using the GPT-4o model.  The first run didn't work. It seemed like the contributors page hadn't fully loaded before the extract script ran, but it worked fine after that.
+
+```js
+await stagehand.init();
+await stagehand.page.goto("https://github.com/browserbase/stagehand");
+await stagehand.act({ action: "click on the contributors" });
+const contributor = await stagehand.extract({
+  instruction: "extract the top contributor",
+  schema: z.object({
+    username: z.string(),
+    url: z.string(),
+  }),
+});
+console.log(`Our favorite contributor is ${contributor.username}`);
+```
+
+
+## Testing the Todo App
+
+I tested against the [Haiku version](https://autocode2.github.io/autocode-examples/examples/example-todo/blog/2024-08-01-introducing-react-todo/no_context/fixed_haiku/) of the basic todo app, and the [new Sonnet version](https://autocode2.github.io/autocode-examples/examples/example-todo/blog/2024-10-24-new-sonnet/basic/sonnet-v2/) of the same app.
+
+### Observe
+
+To further explore Stagehand’s potential, I first tried the `observe` command. Here’s an example of what it returned for the Haiku version of the Todo app.
+
+```js
+[
+  {
+    description: 'A button to navigate to the next stage or page.',
+    selector: 'xpath=/html/body[1]/button[1]'
+  },
+  {
+    description: 'A button to add a new todo item to the list.',
+    selector: 'xpath=/html/body[1]/div[1]/div[1]/button[1]'
+  },
+  {
+    description: 'A button to filter and display all todo items.',
+    selector: 'xpath=/html/body[1]/div[1]/div[1]/div[1]/button[1]'
+  },
+  {
+    description: 'A button to filter and display only completed todo items.',
+    selector: 'xpath=/html/body[1]/div[1]/div[1]/div[1]/button[2]'
+  },
+  {
+    description: 'A button to filter and display only incomplete todo items.',
+    selector: 'xpath=/html/body[1]/div[1]/div[1]/div[1]/button[3]'
+  }
+]
+```
+
+I can see how this could be really useful in an agentic environment. Though for now we just need `act` and `extract` to test the app.
+
+### Act and Extract
+
+```js
+function addItem(name: string) {
+  return stagehand.act({ action: `Add an item '${name}' to the todo list` });
+}
+
+function markAsCompleted(name: string) {
+  return stagehand.act({ action: `Mark '${name}' as completed`, useVision: true });
+}
+
+function extractTodoList() {
+  return stagehand.extract({
+    instruction: "Extract the todo list",
+    schema: z.object({
+      items: z.array(z.object({ text: z.string(), completed: z.boolean() })),
+      completedCount: z.number(),
+      incompleteCount: z.number(),
+    }),
+  });
+}
+```
+
+To test the app, I created two actions, `addItem` and `markAsCompleted`, and an extractor `extractTodoList` to get the current state. Now we can write some simple tests.
+
+```js
+
+describe('Todo App', () => {
+  beforeEach(async () => {
+    await stagehand.page.goto(NEW_SONNET_BASIC_URL);
+  })
+
+  test("can add items to the list", async () => {
+    await addItem("Buy eggs");
+    await addItem("Buy sausages");
+
+    let todoList = await extractTodoList();
+    expect(todoList.items).toHaveLength(2);
+    expect(todoList.items[0].text).toEqual("Buy eggs");
+    expect(todoList.items[1].text).toEqual("Buy sausages");
+    expect(todoList.incompleteCount).toEqual(2);
+    expect(todoList.completedCount).toEqual(0);
+  }, 180 * 1000);
+
+  test("can mark items as completed", async () => {
+    await addItem("Buy eggs");
+    await addItem("Buy sausages");
+
+    await markAsCompleted("Buy sausages");
+    let todoList = await extractTodoList();
+    expect(todoList.items).toHaveLength(2);
+    expect(todoList.items[0].text).toEqual("Buy eggs");
+    expect(todoList.items[1].text).toEqual("Buy sausages");
+    expect(todoList.items[1].completed).toEqual(true);
+    expect(todoList.incompleteCount).toEqual(1);
+    expect(todoList.completedCount).toEqual(1);
+  }, 180 * 1000);
+});
+```
+
+So far, everything is straightforward to work with, but does it actually work? The addItem action performs flawlessly on both apps and even with gpt-4o-mini. The extractTodoList function also works well, though it occasionally confuses empty todo lists with other UI elements. A bit of prompt engineering could likely resolve this issue. The markAsCompleted function, however, is the least reliable, even when using gpt-4o and the useVision flag. The challenge is that the LLM doesn’t consistently understand that, in both interfaces, it should click the checkbox to mark completion. Often, it clicks on the item text instead—doing nothing in the Haiku version and opening the text for editing in the Sonnet version. Interestingly, the agentic loop can sometimes recognize when it hasn’t succeeded; for instance, it might exit the edit interface but then inadvertently click the delete button or get caught in a loop.
+
+## Conclusion
+
+Stagehand is a fascinating and promising tool, and I already have plenty of ideas for future uses. Though it’s still new and a bit rough around the edges (it’s not quite the “AI-powered successor to Playwright” just yet), I’d consider it more of a version 0.1 than a full 1.0 release. That said, I expect it to improve rapidly. The implementation is also worth exploring, both for its clever DOM processing and its agent-driven prompts and logic.
+
+**[View the code on GitHub](https://github.com/autocode2/stagehand-todo-evaluator)**
