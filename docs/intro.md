@@ -2,46 +2,56 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+# Intro
 
-Let's discover **Docusaurus in less than 5 minutes**.
+Let's discover **auto-code in less than 5 minutes**.
+
+## Installation and Setup
+
+You will need an Anthropic or OpenAI API key to use this tool. They should be exported as environment variables. For example
+
+```bash
+export OPENAI_API_KEY="your-api-key"
+export ANTROPIC_API_KEY="your-api-key"
+```
+
+Then you can run the tool via `npx`:
+
+```base
+npx @autocode2/cli@latest --help
+```
+
+For brevity, I recommend adding an alias to your shell profile:
+
+```bash
+alias ac2="npx @autocode2/cli@latest"
+```
+
+Then you can run the tool via `ac2`.  The following examples will assume you have done this.
 
 ## Getting Started
 
-Get started by **creating a new site**.
-
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
-
-### What you'll need
-
-- [Node.js](https://nodejs.org/en/download/) version 18.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
-
-## Generate a new site
-
-Generate a new Docusaurus site using the **classic template**.
-
-The classic template will automatically be added to your project after you run the command:
+Get started by **creating a new app**.  We'll use a simple remix app starter, but you can of course start anything you like.
 
 ```bash
-npm init docusaurus@latest my-website classic
+npx create-remix@latest --template jacob-ebey/remix-shadcn
+cd your-app-name
+npm run dev
 ```
 
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
-
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
+## Generate some code
 
 ```bash
-cd my-website
-npm run start
+ac2 code:run --include "src/**/*.{ts,tsx}" -m sonnet "Replace this initial starter app with a simple todo app"
 ```
 
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
+All being well, you should see some output from the LLM and it should have edited the files in your project.
 
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
+## Chat with the LLM
 
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+You can continue the conversation with the LLM by using the `-c` (or `--continue`) flag, or for an interactive chat use the `code:chat` command.
+
+```bash
+ac2 code:chat -c -m sonnet
+```
+

@@ -71,7 +71,7 @@ const config: Config = {
         src: 'img/ai-builder-logo-svg.svg',
       },
       items: [
-        { to: '/documentation', label: 'Documentation', position: 'left' },
+        { to: '/docs/intro', label: 'Documentation', position: 'left' },
         { to: '/blog', label: 'Blog', position: 'left' },
         {
           href: 'https://github.com/autocode2',
@@ -87,7 +87,7 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              label: 'Tutorial',
+              label: 'Intro',
               to: '/docs/intro',
             },
           ],
