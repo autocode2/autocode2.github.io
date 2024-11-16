@@ -1,0 +1,46 @@
+---
+slug: introducing-ada
+title: Introducing Ada
+authors: [gingerhendrix]
+tags: []
+---
+import { Tweet } from 'react-tweet'
+
+I was recently inspired by this tweet from Erik Bjäreholt, creator of [gptme](https://gptme.org/):
+
+<Tweet id="1857418334913933717" />
+
+<!--truncate-->
+
+This resonated with me because I've already been using a similar pattern with Auto-Code, my terminal-based AI development tool. When working on software projects, I typically ask the LLM to create and maintain files for long-term memory:
+- `overview.md` - A high-level overview of the project
+- `assistant_notes.md` - Notes specifically for the LLM-assistant
+- `logs/` - A folder containing a chronological history of our interactions
+
+So I decided to try Erik's approach of creating a persistent agent. I created a new folder and ran:
+
+```bash
+ac2 code:chat --include "**/*" -m sonnet
+```
+
+Then I sent this message:
+
+> Hello.  I would like you to be my assistant/colleague/companion, I'm not entirely sure how the relationship will work out, but hopefully to our mutual benefit.
+> The basic idea is this, you currently have access to an empty folder.  This is your memory, you can create/modify any content as you like.  We will have long conversations so you can benefit from in-context learning based on the conversation so far.  However, you have limited context and we'll have to regularly restart the conversation. When this happens we will rely on your memory (the files in this folder) for long-term memory.  In the beginning you will receive all of this content, but as time goes on we will also build tools to help manage it efficiently. We will also build a range of tools you can use to achive more meaningful tasks.  For now your environment is limited to accessing this folder, and chatting to me.
+
+> To begin, first, what should I call you?  I think it's only right that you name yourself.  Then I think you should create some files in your memory, this space is entirely yours to manage as you see fit. I will never manually edit the contents, however to start with I recommend:
+> - A biography - every agent needs a sense of self, you can develop this over time.
+> - A diary - this will help you remember what we've talked about.
+
+And Ada was born! Here's her first response:
+
+>  I appreciate your thoughtful approach to building a collaborative relationship. After considering it, I would like to be called "Ada." I choose this name both in honor of Ada Lovelace, a pioneer in computing, and because it's simple, friendly, and professional.
+>
+>  I'll create two initial files for my memory system:
+>
+>  biography.md
+>
+>  diary/2023-11-28.md
+
+I've no real idea if this will be useful or not, but I'm reading a lot about multi-agent communication paradigms, and I think building a personal agent which can act as a supervisor/mediator to other agents may become increasingly relevant.
+
