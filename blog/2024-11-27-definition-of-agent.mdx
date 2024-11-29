@@ -1,6 +1,6 @@
 ---
 slug: definition-of-agent
-title: The thorny question of what is an agent?
+title: What is an agent?
 authors: [gingerhendrix]
 tags: []
 ---
@@ -18,11 +18,13 @@ Russell and Norvig (R&N) define an agent as *"anything that can be viewed as per
 
 R&N also go on to define *goal-directed agents*, which are agents that are given goals to work towards rather than procedures for performing a task.  Prompting with LLMs is almost always goal-directed, we specify to the LLM what we want it to do, not how to do it.
 
+This kind of definition isn't really helpful unless you are specifically looking a catch-all term.
+
 ## Environments
 
-The most important takeaway from the R&N definition is that agents are defined in terms of their *environment*.  LLM agents may have quite trivial environments, a simple chatbot can be considered an agent, but the only means the agent has of affecting its environment is through text responses to a human, and similarly the only feedback it receives is from the human responses.
+The one important takeaway from the R&N definition is that agents are defined in terms of their *environment*.  LLM agents may have quite trivial environments, a simple chatbot can be considered an agent, but the only means the agent has of affecting its environment is through text responses to a human, and similarly the only feedback it receives is from the human responses.
 
-The key to having useful agents is in providing rich environments to the agents. [Shunyu Yao](https://www.latent.space/p/shunyu) made this point very well on the latent.space podcast.
+The key to having useful agents is in providing rich environments to the agents. It's well worth listening to [Shunyu Yao](https://www.latent.space/p/shunyu) on the latent.space podcast where among other things he discusses the importance of thinking about the agentic environment.
 
 ## Agentic Systems
 
@@ -64,7 +66,7 @@ At the smallest scale, it's interesting to think about how agentic building bloc
 
 However, there are more agentic methods of composition.  For instance, we can compose conversational agents by simply allowing them to talk to each other. This brings a very different range of patterns than software developers are used to, often with ideas from how humans are composed to work towards goals - teams, supervisors, specialists etc.
 
-We can also think about the composition of larger agentic systems. [Anthropic's MCP](https://modelcontextprotocol.io/) provides a good example of this.  The Claude desktop agent can now interface with other agentic software, for example cursor, we could imagine a scenario where I'm using the composer agent in Cursor, and I need to give the cursor agent some info I read in a blog post that I bookmarked.  Perhaps the cursor agent could communicate with claude, which may in turn invoke a Google Chrome agent that can search my bookmarks, and in a goal-directed manner they co-operate to perform the task.
+We can also think about the composition of larger agentic systems. [Anthropic's MCP](https://modelcontextprotocol.io/) provides a good example of this.  The Claude desktop agent can now interface with other agentic software, for example Cursor. We could imagine a scenario where I'm using the composer agent in Cursor, and I need to give the Cursor agent some info I read in a blog post that I bookmarked.  Perhaps the Cursor agent could communicate with Claude, which may in turn invoke a Google Chrome agent that can search my bookmarks, and in a goal-directed manner they co-operate to perform the task.
 
 A final thing to think about in agentic composition is that through LLMs' code-writing abilities it is possible for LLMs to build their own glue code to facilitate integration with other systems/agents. A great example of this (and perhaps my favourite paper of the year) is the [Agora Protocol](https://agoraprotocol.org/) which demonstrates how agents can dynamically negotiate protocols between agents which bypass LLM calls completely.
 
