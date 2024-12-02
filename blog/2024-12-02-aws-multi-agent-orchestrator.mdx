@@ -10,7 +10,7 @@ AWS Labs have released a [Multi-Agent Orchestrator Framework](https://awslabs.gi
 
 > Flexible and powerful framework for managing multiple AI agents and handling complex conversations.
 
-It's implemented in python and typescript so I thought I should take a look and see what it does.
+It's implemented in python and typescript so lets take a look and see what it does.
 
 (TL;DR The whole framework can be reduced to a single classification prompt and a bit of supporting machinery).
 
@@ -161,6 +161,6 @@ Seems like a fairly standard prompt:
 
 ## Review and Conclusion
 
-Well, yet again "Flexible and Powerful Framework" boils down to a single prompt, and quite a restrictive model of multi-agent orchestration.  This seems likely to only work with small numbers of agents with completely distinct responsibilities such that no coordination between agents is required.
+The Multi-Agent Orchestrator boils down to a single prompt and quite a restrictive model of multi-agent interaction.  This seems likely to only work with small numbers of agents with completely distinct responsibilities such that no coordination between agents is required.
 
 A similar pattern is the "Supervisor" pattern.  However in this case the supervisor is much more than just a classifier. It is often implemented agentically and is responsible for co-ordinating the sub-agents to provide the information required for the supervisor to then respond to the user. This pattern seems much more flexible for most use-cases and can be engineered to be little more than a router if that is all the situation requires.
